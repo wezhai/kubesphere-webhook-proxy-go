@@ -1,0 +1,13 @@
+version: "3"
+services:
+  kubesphere-webhook-proxy-go:
+    container_name: kubesphere-webhook-proxy-go
+    restart: always
+    image: wezhai/kubesphere-webhook-proxy-go:latest
+    ports:
+      - "5200:5200"
+    volumes:
+      - ./app.log:/app/app.log:rw
+    environment:
+      - DEBUG=true # 开启DEBUG模式
+      - KUBESPHERE_URL="http://127.0.0.1:30880"   # KubeSphere控制台地址

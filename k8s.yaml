@@ -1,0 +1,57 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kubesphere-alert
+  namespace: default
+  labels:
+    app: kubesphere-alert
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubesphere-alert
+  template:
+    metadata:
+      labels:
+        app: kubesphere-alert
+    spec:
+      containers:
+        - name: kubesphere-alert
+          image: 'wezhai/kubesphere-webhook-proxy-go:latest'
+          ports:
+            - name: tcp
+              containerPort: 5200
+              protocol: TCP
+          env:
+            - name: KUBESPHERE_URL
+              value: 'http://127.0.0.1:30880'
+            - name: DEBUG
+              value: true
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: default
+      serviceAccount: default
+      securityContext: {}
+      schedulerName: default-scheduler
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kubesphere-alert
+  namespace: default
+  labels:
+    app: kubesphere-alert
+spec:
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 5200
+      targetPort: 5200
+  selector:
+    app: kubesphere-alert
+  type: ClusterIP
