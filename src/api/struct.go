@@ -3,6 +3,7 @@ package api
 type Alert struct {
 	StartsAt    string `json:"startsAt"`
 	Annotations struct {
+		AliasName string `json:"aliasName"`
 		Kind      string `json:"kind"`
 		Summary   string `json:"summary"`
 		Resources string `json:"resources"`

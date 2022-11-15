@@ -36,7 +36,7 @@ func GwWoker(c *fiber.Ctx) error {
 	}
 
 	firstAlert := hook.Alerts[0]
-	aliasName := hook.CommonAnnotations.AliasName
+	aliasName := firstAlert.Annotations.AliasName
 	alertName := hook.CommonLables.Alertname
 	if aliasName != "" {
 		alertName = fmt.Sprintf("%v(%v)", alertName, aliasName)
