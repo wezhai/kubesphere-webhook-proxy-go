@@ -13,10 +13,29 @@ func TestConvertDatetime(t *testing.T) {
 	}
 }
 func TestSpliceSlice(t *testing.T) {
-	s := []string{"hello", "golang"}
+	s := []string{"hello", "", "golang", ""}
 	want := "[hello, golang]"
 	got := SpliceSlice(s, ",")
 	if got != want {
 		t.Errorf("Error Got: %v Want: %v", got, want)
+	}
+}
+
+func TestSpliceSliceGroup(t *testing.T) {
+	type test struct {
+		input []string
+		want  string
+		sep   string
+	}
+	tests := map[string]test{
+		"1": {input: []string{"hello", "golang"}, sep: ",", want: "[hello, golang]"},
+		"2": {input: []string{"", "hello", "", "golang", ""}, sep: ",", want: "[hello, golang]"},
+		"3": {input: []string{"", "hello", "", "golang", ""}, sep: ":", want: "[hello: golang]"},
+	}
+	for name, tc := range tests {
+		got := SpliceSlice(tc.input, tc.sep)
+		if got != tc.want {
+			t.Errorf("Erorr Key: %v Got: %v Want: %v", name, got, tc.want)
+		}
 	}
 }
